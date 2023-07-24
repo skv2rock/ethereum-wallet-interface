@@ -1,2 +1,3 @@
 export { Connect } from './connect';
-export { TokenList } from './tokenList';
+export { WalletDetails } from './WalletDetails';
+export { TokenList } from './TokenList';
