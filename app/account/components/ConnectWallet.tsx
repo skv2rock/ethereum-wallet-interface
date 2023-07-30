@@ -1,10 +1,9 @@
 'use client';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-const connector = new MetaMaskConnector();
+
 import { useConnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
-export function Connect() {
+export function ConnectWallet() {
   const { connect, isLoading } = useConnect({
     connector: new InjectedConnector()
   });

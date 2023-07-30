@@ -1,34 +1,61 @@
-import { EthereumApi } from '@/app/apis/ethereum.api';
-import {
-  ARBITRUM_CRV,
-  ARBITRUM_USDC,
-  ARBITRUM_USDT,
-  ETHEREUM_CRV,
-  ETHEREUM_USDC,
-  ETHEREUM_USDT,
-  POLYGON_CRV,
-  POLYGON_USDC,
-  POLYGON_USDT
-} from '@/app/shared/constants';
-import { TokenList } from './TokenList';
+'use client';
+
+import { ARBITRUM_TOKENS, ETHEREUM_TOKENS, POLYGON_TOKENS } from '@/app/shared/constants';
 import { useAccount } from 'wagmi';
-import { arbitrum, polygon, mainnet } from 'wagmi/chains';
+import { Select, TokenList } from '.';
+import { AccountFilter, FiltersOptions, NetworkBalancesData } from '@/app/shared/types';
 import { useTokensHook } from '../hooks/useTokensHook';
+import { useEffect, useState } from 'react';
+import { NetworksNames } from '@/app/shared/enums/network.enums';
+import { FiltersUtils } from '@/app/utils';
+import { accountFilters } from '@/app/shared/data';
 
 export function WalletDetails() {
   const { address } = useAccount();
-  const ethBalances = useTokensHook([ETHEREUM_USDT, ETHEREUM_USDC, ETHEREUM_CRV], EthereumApi.getTokenBalance);
-  const polygonBalances = useTokensHook([POLYGON_USDT, POLYGON_USDC, POLYGON_CRV], EthereumApi.getTokenBalance);
-  const arbitrumBalances = useTokensHook([ARBITRUM_USDT, ARBITRUM_USDC, ARBITRUM_CRV], EthereumApi.getTokenBalance);
+
+  const ethereumBalances = useTokensHook(NetworksNames.Ethereum, ETHEREUM_TOKENS);
+  const polygonBalances = useTokensHook(NetworksNames.Polygon, POLYGON_TOKENS);
+  const arbitrumBalances = useTokensHook(NetworksNames.Arbitrum, ARBITRUM_TOKENS);
+
+  const [currentFilters, setCurrentFilters] = useState<AccountFilter[]>(accountFilters);
+  const [filteredBalances, setFilteredBalances] = useState<NetworkBalancesData[]>([]);
+
+  useEffect(() => {
+    setFilteredBalances([ethereumBalances, polygonBalances, arbitrumBalances]);
+  }, [ethereumBalances, polygonBalances, arbitrumBalances]);
+
+  const handleFilterChange = (filterName: string, option: FiltersOptions): void => {
+    let clonedNetworksData = [{ ...ethereumBalances }, { ...polygonBalances }, { ...arbitrumBalances }];
+
+    setCurrentFilters(FiltersUtils.getUpdatedFilters(currentFilters, filterName, option));
+
+    accountFilters.forEach((filter: AccountFilter) => {
+      clonedNetworksData = FiltersUtils.getfilteredData(filter, clonedNetworksData);
+    });
+
+    setFilteredBalances(clonedNetworksData);
+  };
 
   return (
     <div className='w-full '>
-      <h1 className='text-center text-2xl p-5 rounded-lg bg-fuchsia-300/10 mb-5'>
+      <h2 className='text-center text-2xl p-5 rounded-lg bg-fuchsia-300/10 mb-5'>
         Wallet address: <span className='text-secondary ml-2'>{address}</span>
-      </h1>
-      <TokenList network={mainnet.name} balances={ethBalances} />
-      <TokenList network={polygon.name} balances={polygonBalances} />
-      <TokenList network={arbitrum.name} balances={arbitrumBalances} />
+      </h2>
+      <div className='flex justify-end my-5'>
+        {currentFilters.map((filter: AccountFilter) => (
+          <Select
+            filterName={filter.name}
+            key={filter.name}
+            onFilterChange={handleFilterChange}
+            options={filter.options}
+            placeholder={`All ${filter.name}`}
+          />
+        ))}
+      </div>
+
+      {filteredBalances.map((networkBalancesData: NetworkBalancesData) => (
+        <TokenList key={networkBalancesData.network} networkBalancesData={networkBalancesData} />
+      ))}
     </div>
   );
 }

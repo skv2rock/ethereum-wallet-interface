@@ -1,14 +1,14 @@
-import { TokenPromiseResult } from '@/app/shared/types';
+import { NetworkBalancesData, TokenPromiseResult } from '@/app/shared/types';
 import { IconsUtils } from '@/app/utils';
 import Image from 'next/image';
 
-export function TokenList({ network, balances }: { network: string; balances?: TokenPromiseResult[] }) {
+export function TokenList({ networkBalancesData }: { networkBalancesData: NetworkBalancesData }) {
   return (
     <div>
-      <h2 className='text-center text-2xl'>{network} network</h2>
-      {balances ? (
+      <h2 className='text-center text-2xl'>{networkBalancesData.network} network</h2>
+      {networkBalancesData.data.length > 0 ? (
         <ul className='sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-3 gap-4'>
-          {balances?.map((token: TokenPromiseResult, index: number) => (
+          {networkBalancesData.data.map((token: TokenPromiseResult, index: number) => (
             <li key={index} className='bg-fuchsia-300/10 max-w-lg p-4 text-stone-50 text-2xl text-center'>
               <div>{token.name}</div>
 
