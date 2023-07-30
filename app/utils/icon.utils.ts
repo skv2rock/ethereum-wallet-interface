@@ -2,7 +2,7 @@ import usdcIcon from '@/app/assets/usdc-icon.png';
 import usdtcon from '@/app/assets/usdt-icon.png';
 import crvIcon from '@/app/assets/crv-icon.png';
 import iconPlaceholder from '@/app/assets/Icon-placeholder.png';
-import { TokenNames } from '../enums/tokens.enums';
+import { TokenNames } from '../shared/enums/tokens.enums';
 
 export class IconsUtils {
   public static getIconUrlByName(name: string) {

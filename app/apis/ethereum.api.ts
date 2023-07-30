@@ -1,10 +1,10 @@
 import { ethers, formatUnits } from 'ethers';
-import { erc20ABI } from 'wagmi';
+import { Address, erc20ABI } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
 import { Token, TokenPromiseResult } from '../shared/types';
 
 export class EthereumApi {
-  public static async getTokenBalance(walletAddress: string, token: Token): Promise<TokenPromiseResult> {
+  public static async getTokenBalance(walletAddress: Address, token: Token): Promise<TokenPromiseResult> {
     const provider = new ethers.JsonRpcProvider(mainnet.rpcUrls.default.http[0]);
 
     const contract = new ethers.Contract(token.contract, erc20ABI, provider);

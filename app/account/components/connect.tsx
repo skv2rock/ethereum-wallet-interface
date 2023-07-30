@@ -1,6 +1,5 @@
 'use client';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-const connector = new MetaMaskConnector();
+
 import { useConnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
