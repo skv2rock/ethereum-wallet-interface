@@ -15,12 +15,12 @@ export default function ConnectWallet() {
   useEffect(() => {
     const state = localStorage.getItem('walletConnectState') || '';
 
-    if (!isConnected && state === 'true') connect();
+    if (isConnected) {
+      localStorage.setItem('walletConnectState', 'true');
+    } else {
+      if (state === 'true') connect();
+    }
   }, [isConnected, connect]);
-
-  useEffect(() => {
-    localStorage.setItem('walletConnectState', isConnected.toString());
-  }, [isConnected]);
 
   return (
     <div className='relative flex place-items-center flex-col max-w-4xl text-center w-full bg-fuchsia-300/10 p-10 rounded-lg'>
