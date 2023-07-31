@@ -1,7 +1,15 @@
 'use client';
 
 import { useAccount } from 'wagmi';
-import { ConnectWallet, WalletDetails } from './components';
+import dynamic from 'next/dynamic';
+
+const WalletDetails = dynamic(() => import('./components/WalletDetails'), {
+  ssr: false
+});
+
+const ConnectWallet = dynamic(() => import('./components/ConnectWallet'), {
+  ssr: false
+});
 
 export default function Account() {
   const { isConnected } = useAccount();
