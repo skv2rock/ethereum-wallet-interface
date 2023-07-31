@@ -3,7 +3,7 @@
 import { useConnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
-export function ConnectWallet() {
+export default function ConnectWallet() {
   const { connect, isLoading } = useConnect({
     connector: new InjectedConnector()
   });

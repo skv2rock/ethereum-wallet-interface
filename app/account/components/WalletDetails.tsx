@@ -10,7 +10,7 @@ import { NetworksNames } from '@/app/shared/enums/network.enums';
 import { FiltersUtils } from '@/app/utils';
 import { accountFilters } from '@/app/shared/data';
 
-export function WalletDetails() {
+export default function WalletDetails() {
   const { address } = useAccount();
 
   const ethereumBalances = useTokensHook(NetworksNames.Ethereum, ETHEREUM_TOKENS);
